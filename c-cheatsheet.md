@@ -42,3 +42,24 @@ int i, num[10], j, myftn(); // combine declaration legal
 `float` -- single precision floating point (4 bytes)
 
 `double` -- double precision floating point (8 bytes)
+
+## Arithmetic & Bitwise Operators
+arithmetic operators `+` `-` `*` `/` `%` `-(negative)`
+
+BIT-WISE two operand `|` OR `&` AND `^` XOR -- only works for integer types (int, char etc.)
+
+BIT-WISE single operand `~` NOT
+```C
+(1010 & 1100) == 1000
+~1010 == 0101
+```
+
+shift operators `<<` shift left, `>>` shift right
+```C
+(1010 << 1) == 10100 // one extra space
+(1010 >> 1) == 101 // fall off
+```
+
+LOGICAL two operand `&&` AND `||` OR
+
+LOGICAL single operand `!` NOT
