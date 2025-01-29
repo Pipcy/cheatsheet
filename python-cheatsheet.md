@@ -2,6 +2,8 @@
 
 This cheat sheet covers basic Python concepts relevant to data science and machine learning, as presented in the notebook.
 
+[python official doc](https://docs.python.org/3/tutorial/index.html)
+
 [MarkDown CheatSheet](https://www.markdownguide.org/extended-syntax/)
 
 [More Markdown Stuff](https://www.markdownguide.org/extended-syntax/)
