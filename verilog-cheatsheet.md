@@ -13,7 +13,39 @@ Both works with verilog code.
 - HDLs (Verilog, VHDL)
 
 ## Fundamentals
+### comments
+- single-line comments `//`
+- mulit-line coments `/* ...*/`
+### operators
+- Unary = `a = ~b;`
+- Binary =  `a = b & c;`
+- Ternary `a = (b<c)? b : c;`
+### Encapsulation
+```verilog
+module and_gate (
+  input  in1, in2,
+  output  out);
 
+  <module internals>
+
+endmodule
+```
 ## Structural Verilog
+example
+```verilog
+module xor_gate(
+  input a, b,
+  output z);
 
+  wire abar, bbar, t1, t2;
+
+  not invA (abar, a);
+  not invB (bbar, b);
+  and and1 (t1, a, bbar);
+  and and2 (t2, b, abar);
+  or or1 (z, t1, t2)
+endmodule
+```
+This is:
+![example image](xor-gate-example.png)
 ## Behavioral Verilog
