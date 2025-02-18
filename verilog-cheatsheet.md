@@ -48,4 +48,137 @@ endmodule
 ```
 This is:
 ![example image](xor-gate-example.png)
+
+### Functional Example
+```verilog
+module fulladder(
+  input a, b, cin,
+  output sum, court);
+
+  assign sum = a ^ b ^ cin;
+  assign cout = a & b | a & cin | b & cin;
+endmodule
+```
+synthesis tool can turn this logic into a gate-level verilog
 ## Behavioral Verilog
+- Uses procedural block to describe behavior without explicit binding to HW
+- Procedural assignments (e.g., always) can only manipulate register variables
+```verilog
+module compare (
+  input[1:0] A, B,
+  output A_lt_B, A_gt_B, A_eq_B);
+  reg A_lt_B; // Storage container
+  reg A_gt_B;
+  reg A_eq_B;
+  always @(A or B) // detect event
+  begin
+    A_lt_B = 0;
+    A_gt_B = 0;
+    A_eq_B = 0;
+    if (A == B) A_eq_B = 1;
+    else if (A > B) A_gt_B = 1;
+    else A
+  end
+endmodule
+```
+## Some comments on Examples
+- Verilog describes a circuit as a set of modules
+- Each module has input and output ports
+  - Single bit
+  - Multiple bit – array syntax
+- Each port can take on a digital value (0, 1, X[unknown], Z[high impedance])
+- May contain multiple assign statements, primitives, behavioral statements, and instantiated modules - all run concurrently
+- Three main ways to specify module internals
+  - Continuous assignment statements – `assign`
+  - Concurrent statements – `always`
+  - Submodule instantiation (hierarchy)
+
+## Module Hierarchy
+Connect modules together to form larger modules
+```verilog
+module NAND2 (
+  input in1, in2,
+  output out);
+  assign out = ~(in1 & in2);
+endmodule
+```
+```verilog
+module AND2 (
+  input in1, in2,
+  output out);
+  wire w1; // to connect the 2 NAND's
+  NAND2 nand1(.in1(in1),.in2(in2),.out(w1));
+  NAND2 nand2(w1,w1,out);
+endmodule
+```
+![example image2](and-with-nand.jpg)
+
+## Data types
+- Wire - Represent connections between hardware elements
+```verilog
+wire a; // declare a wire a
+wire b,c; // declare two wires b, c
+```
+- Register - Represent data storage elements
+  - Registers retain value until another value is placed/assigned
+  - Registers are not necessarily built from edge triggered flip-flops
+  - Registers do not need drivers or a clock to change value
+```verilog
+reg reset; // declare a variable reset that can hold its value
+initial // do once at beginning of simulation
+begin
+  reset = 1’b1; // initialize reset to 1
+  #100 reset = 1’b0; // after 100 time units reset, deassert
+end
+```
+### Vectors
+```verilog
+wire a;                     // scalar net variable, default
+wire [7:0] bus;             // 8-bit bus
+wire [31:0] busA,busB,busC; // 3 buses of 32-bit width
+reg clock;                  // scalar register, default
+
+busA[7]   // bit # 7 of vector busA
+busB[2:0] // three least significant bits
+          // of busB
+```
+## Verilog Numbers
+- Sized numbers: <size>'<base><number>
+  - <size> - decimal number specifying number of bits
+  - <base> - b – binary, d – decimal, o – octal, h – hex
+  - <number> - consecutive digits
+    - normal digits 0, 1, …, 9 (if appropriate for base)
+    - hex digits a, b, c, d, e, f
+    - x "unknown" digit
+    - z "high-impedance" digit
+- Examples
+  `4’b1111` `12’h7af` `16’d255`
+
+## Testbench Example
+```verilog
+module stimulus;
+reg clk, reset;
+wire[3:0] q;
+
+// instantiate the design block
+ripple_carry_counter r1(q, clk, reset); // inc on uptick
+
+// control the clk signal that drives the design block
+// cycle time = 10
+initial
+  clk = 1’b0; // set clk to 0 – this is done only once
+
+always
+  #5 clk = ~clk; // toggle clk every 5 time units
+
+// control the reset signal that drives the signal block
+// reset is asserted from 0 to 15 and from 195 to 205
+initial begin
+  reset = 1’b1; // reset at 0
+  #15 reset = 1’b0; // release reset at 15
+  #180 reset = 1’b1; // reset at 195
+  #10 reset = 1’b0; // release reset at 205
+  #20 $finish; // terminate the simulation
+end
+endmodule
+```
