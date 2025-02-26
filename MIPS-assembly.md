@@ -27,8 +27,8 @@ syscall
 ### Arithmetic Core Instruction Set
 ```
 div $t1, $t0     # t1 / t0
-mfhi $t2         # store quotient
-mflo $t3         # store remainder
+mfhi $t2         # store remainder
+mflo $t3         # store quotient
 ```
 
 ```
